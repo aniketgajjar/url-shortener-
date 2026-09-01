@@ -61,6 +61,26 @@ const redirectUrl = async (req, res) => {
             });
         };
 
+        const clickData = {
+            ip: req.ip || "Unknown",
+            userAgent: req.get("User-Agent") || "Unknown",
+            referrer: req.get("Referer") || "Direct"
+        };
+
+        await Url.findByIdAndUpdate(
+            url._id,
+            {
+                // add click record
+                $push: {
+                    clicks: clickData
+                },
+                // increase counter
+                $inc: {
+                    totalClicks: 1
+                }
+            }
+        );
+
         return res.redirect( url.originalUrl );
 
 
@@ -73,6 +93,7 @@ const redirectUrl = async (req, res) => {
         });
     };
 };
+
 
 module.exports = {
     createShortUrl, 
