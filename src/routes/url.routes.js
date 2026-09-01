@@ -1,15 +1,16 @@
 const express = require('express');
 const {
     createShortUrl,
-    redirectUrl
 } = require('../controllers/url.controller');
+
+const { getUrlAnalytics } = require('../controllers/analytics.controller')
 
 const router = express.Router();
 
 // API Router
 router.post('/', createShortUrl);
 
-// Public URL
-// router.get('/:shortCode', redirectUrl);
+// URL Analytics
+router.get("/:shortCode/analytics", getUrlAnalytics);
 
 module.exports = router;
