@@ -1,24 +1,24 @@
 const mongoose = require('mongoose');
 
-// const clickSchema = new mongoose.Schema ({
-//     ip : {
-//         type: String, 
-//         default: 'Unknown'
-//     }, 
-//     userAgent : {
-//         type: String, 
-//         default: 'Unknown'
-//     }, 
-//     referrer : {
-//         type : String, 
-//         default: 'Direct'
-//     },
-// }, 
-//     { timestamps : true }
-// );
+const clickSchema = new mongoose.Schema ({
+    ip : {
+        type: String, 
+        default: 'Unknown'
+    }, 
+    userAgent : {
+        type: String, 
+        default: 'Unknown'
+    }, 
+    referrer : {
+        type : String, 
+        default: 'Direct'
+    },
+}, 
+    { timestamps : true }
+);
 
 
-const urlSchema = new mongoose.Schema = ({
+const urlSchema = new mongoose.Schema({
     originalUrl: { 
         type: String, 
         required: true, 
