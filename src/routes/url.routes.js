@@ -1,6 +1,7 @@
 const express = require('express');
 const {
     createShortUrl,
+    deleteShortUrl
 } = require('../controllers/url.controller');
 const { getUrlAnalytics } = require('../controllers/analytics.controller');
 const { validateUrl } = require('../middleware/url.middleware');
@@ -12,5 +13,10 @@ router.post('/',validateUrl, createShortUrl);
 
 // URL Analytics
 router.get("/:shortCode/analytics", getUrlAnalytics);
+
+
+// Delete Url !
+router.delete("/:shortCode", deleteShortUrl);
+
 
 module.exports = router;

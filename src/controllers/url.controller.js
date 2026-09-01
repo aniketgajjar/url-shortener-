@@ -1,5 +1,6 @@
 const crypto = require ('crypto');
 const Url = require ('../models/url.model');
+const { getUrlAnalytics } = require('./analytics.controller');
 
 const createShortUrl = async (req, res) => {
     
@@ -113,8 +114,40 @@ const redirectUrl = async (req, res) => {
     };
 };
 
+const deleteShortUrl = async (req, res) => {
+    try {
+        const { shortCode } = req.params;
+
+        const url = await Url.findOneAndDelete({ shortCode });
+
+        if (!url) {
+            return res.status(404).json({
+                success: false,
+                message: "Short URL not found!"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Short URL deleted successfully!",
+            data: {
+                shortCode: url.shortCode
+            }
+        });
+
+    } catch (err) {
+        console.log(`Delete URL Error: ${err.message}`);
+
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error!"
+        });
+    }
+};
+
 
 module.exports = {
     createShortUrl, 
-    redirectUrl
+    redirectUrl,
+    deleteShortUrl
 };
