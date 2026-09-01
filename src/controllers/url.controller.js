@@ -6,32 +6,51 @@ const createShortUrl = async (req, res) => {
     try {
         const { originalUrl } = req.body;
 
-        if ( !originalUrl ) {
-            return res.status(400).json({
-                success : false,
-                message : 'original URL is Required!'
+        // Check if URL already exists
+        const existingUrl = await Url.findOne({ originalUrl });
+
+        if (existingUrl) {
+            const shortUrl = `${process.env.BASE_URL}/${existingUrl.shortCode}`;
+
+            return res.status(200).json({
+                success: true,
+                message: "Short URL already exists!",
+                data: {
+                    originalUrl: existingUrl.originalUrl,
+                    shortCode: existingUrl.shortCode,
+                    shortUrl
+                }
             });
-        };
+        }
 
-        // Generate short code !
+        // Generate unique short code
+        let shortCode;
+        let isCodeExists = true;
 
-        const shortCode = crypto.randomBytes(4).toString("hex");
+        while (isCodeExists) {
+            shortCode = crypto.randomBytes(4).toString("hex");
 
-        // Create URL !
+            const existingCode = await Url.findOne({ shortCode });
 
+            if (!existingCode) {
+                isCodeExists = false;
+            }
+        }
+
+        // Create URL
         const url = await Url.create({
-            originalUrl, 
+            originalUrl,
             shortCode
         });
 
         const shortUrl = `${process.env.BASE_URL}/${url.shortCode}`;
 
         return res.status(201).json({
-            success : true, 
-            message : 'Short URL Generate SuccessFully!', 
-            data : {
-                originalUrl : originalUrl, 
-                shortCode : shortCode, 
+            success: true,
+            message: "Short URL generated successfully!",
+            data: {
+                originalUrl: url.originalUrl,
+                shortCode: url.shortCode,
                 shortUrl
             }
         });

@@ -18,25 +18,32 @@ const clickSchema = new mongoose.Schema ({
 );
 
 
-const urlSchema = new mongoose.Schema({
-    originalUrl: { 
-        type: String, 
-        required: true, 
-        trim : true
+const urlSchema = new mongoose.Schema(
+    {
+        originalUrl: {
+            type: String,
+            required: true,
+            trim: true,
+            unique: true
+        },
+
+        shortCode: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true
+        },
+
+        clicks: [clickSchema],
+
+        totalClicks: {
+            type: Number,
+            default: 0
+        }
     },
-    shortCode: { 
-        type: String, 
-        required: true, 
-        unique: true, 
-        trim : true
-    },
-    clicks: [clickSchema], 
-    totalClicks: { 
-        type: Number, 
-        default: 0 
-    },
-},
-    { timestamps : true }
+    {
+        timestamps: true
+    }
 );
 
 const Url = mongoose.model('Url', urlSchema);
