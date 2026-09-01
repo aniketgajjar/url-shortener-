@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const urlRouter = require('./routes/url.routes');
+const { redirectUrl } = require('./controllers/url.controller');
 
 const app = express();
 app.use(cors());
@@ -11,5 +12,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/urls', urlRouter);
+
+// Public URL!
+app.get('/:shortCode', redirectUrl)
 
 module.exports = app;

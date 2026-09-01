@@ -46,7 +46,35 @@ const createShortUrl = async (req, res) => {
 
 }; 
 
+const redirectUrl = async (req, res) => {
+    
+    try {
+
+        const { shortCode } = req.params;
+
+        const url = await Url.findOne({ shortCode });
+
+        if ( !url) {
+            return res.status(400).json({
+                success : false, 
+                message  : 'Short URL is NOT Found!'
+            });
+        };
+
+        return res.redirect( url.originalUrl );
+
+
+    } catch (err) {
+        console.log(`Redirect Error : ${err.message}`);
+
+        return res.status(500).json({
+            success : false, 
+            message : 'Internal Server Error!'
+        });
+    };
+};
 
 module.exports = {
-    createShortUrl
+    createShortUrl, 
+    redirectUrl
 };
